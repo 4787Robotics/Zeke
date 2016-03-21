@@ -105,17 +105,17 @@ public class Zeke extends SimpleRobot {
             rearRight.set(expX + expY);
 //            System.out.println(y + " : " + x);
 
-            /*if (mechstick.getRawButton(1) || drivestick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
+            if (mechstick.getRawButton(1) && drivestick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
             {
                 solenoidA.set(true);
-//                solenoidB.set(true);
+                solenoidB.set(true);
                 Timer.delay(0.25); //del
                 solenoidA.set(false);
-//                solenoidB.set(false); //on, wait 20ms, off
+                solenoidB.set(false); //on, wait 20ms, off
                 while (mechstick.getRawButton(1) || drivestick.getRawButton(1)) {Timer.delay(0.02);}
                 Timer.delay(1); //delay 1 second for refilling in accumulator
-                System.out.println("Both triggers pulled. Firing"); //reminder to replace || in condition with &&
-            }*/
+                System.out.println("Both triggers pulled. Firing"); 
+            }
             Timer.delay(0.005); //5ms
         }
     }
