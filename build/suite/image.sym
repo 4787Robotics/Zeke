@@ -7983,6 +7983,7 @@ METHOD.893188.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
 METHOD.893188.LINETABLE= 1 76
 METHOD.893212.NAME=void edu.wpi.first.wpilibj.templates.Zeke.operatorControl()
 METHOD.893212.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
+<<<<<<< HEAD
 METHOD.893212.LINETABLE= 3 82 15 86 27 87 39 89 45 90 51 91 72 92 85 94 91 96 112 97 120 99 126 102 140 103 154 104 168 105 182 108 200 110 207 111 214 112 227 113 234 114 242 115 275 116 281 117 289 119 306 121
 METHOD.893540.NAME=void edu.wpi.first.wpilibj.templates.Zeke.test()
 METHOD.893540.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
@@ -7990,6 +7991,15 @@ METHOD.893540.LINETABLE= 3 127 15 128 27 129 36 130 59 131 71 132 82 133 92 134 
 METHOD.893728.NAME=edu.wpi.first.wpilibj.templates.Zeke edu.wpi.first.wpilibj.templates.Zeke.<init>()
 METHOD.893728.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
 METHOD.893728.LINETABLE= 2 63 7 36 10 37 13 38 16 39 29 40 42 41 55 45 58 46 61 47 64 48 67 49 70 50 73 51 76 52 89 57 101 58 113 59 125 60 137 61 172 65 184 66 196 67 208 68 220 69
+=======
+METHOD.893212.LINETABLE= 3 82 15 86 27 87 39 89 45 90 51 91 72 92 101 94 107 96 128 97 136 99 142 102 156 103 170 104 184 105 198 119 214 121
+METHOD.893448.NAME=void edu.wpi.first.wpilibj.templates.Zeke.test()
+METHOD.893448.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
+METHOD.893448.LINETABLE= 3 127 15 128 27 129 36 130 59 131 71 132 82 133 92 134 117 138 139 139 154 142
+METHOD.893636.NAME=edu.wpi.first.wpilibj.templates.Zeke edu.wpi.first.wpilibj.templates.Zeke.<init>()
+METHOD.893636.FILE=edu/wpi/first/wpilibj/templates/Zeke.java
+METHOD.893636.LINETABLE= 2 63 7 36 10 37 13 38 16 39 29 40 42 41 55 45 58 46 61 47 64 48 67 49 70 50 73 51 76 52 89 57 101 58 113 59 125 60 137 61 172 65 184 66 196 67 208 68 220 69
+>>>>>>> 2519626204e1b8050bd80833994200c3545b2525
 NATIVE.com.sun.squawk.NativeUnsafe.setShort.NAME=102
 NATIVE.com.sun.squawk.UWord.fromPrimitive.NAME=27
 NATIVE.com.sun.squawk.VM.getPreviousFP.NAME=137
@@ -8163,7 +8173,11 @@ NATIVE.com.sun.squawk.VM.getGlobalAddrCount.NAME=130
 NATIVE.com.sun.squawk.Address.eq.NAME=4
 NATIVE.com.sun.squawk.NativeUnsafe.setObject.NAME=101
 NATIVE.com.sun.squawk.Offset.sub.NAME=51
+<<<<<<< HEAD
 PMR.ROM_SIZE=572992
+=======
+PMR.ROM_SIZE=572824
+>>>>>>> 2519626204e1b8050bd80833994200c3545b2525
 PMR.ROM_SUITE_TABLE=581740
 PMR.REVERSE_PARAMETERS=1
 ROM.GLOBAL.INT.COUNT=29

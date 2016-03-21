@@ -89,7 +89,7 @@ public class Zeke extends SimpleRobot {
             expX = 0;
             expY = 0;
             if(Math.abs(x)>DEADZONEX) 
-                expX = x*x;
+                expX = x*Math.abs(x);
             else{
                 expX=0;
             }
