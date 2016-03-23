@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.SerialPort;
 import java.lang.Math;
 
 /**
@@ -27,16 +28,15 @@ public class Zeke extends SimpleRobot {
     // Variable initializations 
     RobotDrive drive;
     Joystick drivestick;
-    Joystick mechstick;
     DigitalOutput solenoidA;
     DigitalOutput solenoidB;
+    SerialPort serial;
     
     
     // Joystick constants
     final int DRIVESTICK_USB = 1;
-    final int MECHSTICK_USB = 2;
     int motorSwitch = 0;
-    final double solenoidwindow = .05; //50ms, maybe will be variable later on
+    final double solenoidwindow = .3; //50ms, maybe will be variable later on
     final double DEADZONEY = .05;
     final double DEADZONEX = .05;
     double lastTime; //for test method
@@ -44,12 +44,14 @@ public class Zeke extends SimpleRobot {
     // Motor constants
     final int FRONT_LEFT_MOTOR_PWM = 1;
     final int REAR_LEFT_MOTOR_PWM = 2;
-    final int FRONT_RIGHT_MOTOR_PWM = 4;
-    final int REAR_RIGHT_MOTOR_PWM = 3;
+    final int FRONT_RIGHT_MOTOR_PWM = 6;
+    final int REAR_RIGHT_MOTOR_PWM = 5;
     final int SOLENOID_A_CHNL = 1;
     final int SOLENOID_B_CHNL = 2;
     final int TRIGGER_BTN = 1;
     final double TEST_TIMEOUT = .5;
+    
+    boolean whichSolenoid = true;
     
     double x, y, expX, expY;
     
@@ -63,9 +65,13 @@ public class Zeke extends SimpleRobot {
     public Zeke() {
         //drive = new RobotDrive(frontRight, rearRight, frontLeft, rearLeft); //this is wrong
         drivestick = new Joystick(DRIVESTICK_USB);
-        mechstick = new Joystick(MECHSTICK_USB);
         solenoidA = new DigitalOutput(SOLENOID_A_CHNL);
         solenoidB = new DigitalOutput(SOLENOID_B_CHNL);
+        try { serial = new SerialPort(19200); //replace with constant for baudrate 
+        serial.disableTermination();
+        serial.print("G#000000:#FFFFFF:3");
+        }
+        catch (Exception e) { /*good programming practice */ }
     }
 
     /**
@@ -79,15 +85,14 @@ public class Zeke extends SimpleRobot {
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-        while (isOperatorControl() && isEnabled()) {
-            //if(Math.abs(drivestick.getX()) > DEADZONE && Math.abs(drivestick.getY()) > DEADZONE)
-            
+        
+        while (isOperatorControl() && isEnabled()) {            
              
             y = drivestick.getY();
             x = drivestick.getX();
             
             expX = 0;
-            expY = 0;
+            expY     = 0;
             if(Math.abs(x)>DEADZONEX) 
                 expX = x*Math.abs(x);
             else{
@@ -103,18 +108,30 @@ public class Zeke extends SimpleRobot {
             rearLeft.set(expX - expY);
             frontRight.set(expX + expY);
             rearRight.set(expX + expY);
-//            System.out.println(y + " : " + x);
-
-            if (mechstick.getRawButton(1) && drivestick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
+//            System.out.println(y + " : " + x);         
+            
+            if (drivestick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
             {
-                solenoidA.set(true);
-                solenoidB.set(true);
-                Timer.delay(0.25); //del
+                if(drivestick.getRawButton(5))
+                {
+                    solenoidA.set(true);
+                    try { serial.print("G#000000:#FFFFFF:5"); }
+                    catch (Exception e) { } //idc
+                }
+                else if (drivestick.getRawButton(3))
+                {
+                    solenoidB.set(true);
+                    try { serial.print("G#000000:#FFFFFF:5"); }
+                    catch (Exception e) { System.out.println(e); } //idc
+                }
+                Timer.delay(solenoidwindow); //del
                 solenoidA.set(false);
                 solenoidB.set(false); //on, wait 20ms, off
-                while (mechstick.getRawButton(1) || drivestick.getRawButton(1)) {Timer.delay(0.02);}
+                while (drivestick.getRawButton(1)) {Timer.delay(0.02);}
                 Timer.delay(1); //delay 1 second for refilling in accumulator
-                System.out.println("Both triggers pulled. Firing"); 
+                System.out.println("Firing"); 
+                try { serial.print("V#FFFFFF"); }
+                catch (Exception e) { } //idc
             }
             Timer.delay(0.005); //5ms
         }
@@ -139,6 +156,13 @@ public class Zeke extends SimpleRobot {
                 motorList[motorSwitch].set(y);
             }
         }
+    }
+    
+    public void disabled()
+    
+    {
+        solenoidA.set(false);
+        solenoidB.set(false);
     }
 
 }
