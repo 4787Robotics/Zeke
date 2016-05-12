@@ -27,6 +27,7 @@ public class Zeke extends SimpleRobot {
     // Variable initializations 
     RobotDrive drive;
     Joystick drivestick;
+    Joystick anglerstick;
     DigitalOutput solenoidA;
     DigitalOutput solenoidB;
     SerialPort serial;
@@ -36,6 +37,7 @@ public class Zeke extends SimpleRobot {
 
     // Joystick constants
     final int DRIVESTICK_USB = 1;
+    final int ANGLERSTICK_USB = 2;
     int motorSwitch = 0;
     final double DEADZONEY = .05;
     final double DEADZONEX = .05;
@@ -45,6 +47,7 @@ public class Zeke extends SimpleRobot {
     final int REAR_LEFT_MOTOR_PWM = 2;
     final int FRONT_RIGHT_MOTOR_PWM = 6;
     final int REAR_RIGHT_MOTOR_PWM = 5;
+    final int ANGLER_PWM = 9;
     final int SOLENOID_A_CHNL = 1;
     final int SOLENOID_B_CHNL = 2;
     final int TRIGGER_BTN = 1;
@@ -55,23 +58,25 @@ public class Zeke extends SimpleRobot {
     boolean whichSolenoid = true;
     boolean hasFiredThisLoop = true;
 
-    double x, y, expX, expY;
+    double x, y, expX, expY, angY;
 
     // Motor controller configurations
     Jaguar frontLeft = new Jaguar(FRONT_LEFT_MOTOR_PWM);
     Jaguar rearLeft = new Jaguar(REAR_LEFT_MOTOR_PWM);
     Jaguar frontRight = new Jaguar(FRONT_RIGHT_MOTOR_PWM);
     Jaguar rearRight = new Jaguar(REAR_RIGHT_MOTOR_PWM);
+    Jaguar angler = new Jaguar(ANGLER_PWM);
     Jaguar[] motorList = {frontLeft, rearLeft, frontRight, rearRight};
 
     public Zeke() {
         drivestick = new Joystick(DRIVESTICK_USB);
+        anglerstick = new Joystick(ANGLERSTICK_USB);
         solenoidA = new DigitalOutput(SOLENOID_A_CHNL);
         solenoidB = new DigitalOutput(SOLENOID_B_CHNL);
 
-        fireTO = new Timeout(FIRE_TIMEOUT);
-        solenoidTO = new Timeout(SOLENOID_WINDOW);
-        testTO = new Timeout(TEST_TIMEOUT);
+        fireTO = new Timeout(FIRE_TIMEOUT, "fireTO");
+        solenoidTO = new Timeout(SOLENOID_WINDOW, "solenoidTO");
+        testTO = new Timeout(TEST_TIMEOUT, "testTO");
     }
 
     /**
@@ -93,13 +98,11 @@ public class Zeke extends SimpleRobot {
             expY = 0;
             if (Math.abs(x) > DEADZONEX) {
                 expX = x * Math.abs(x);
-                System.out.println(expX);
             } else {
                 expX = 0;
             }
             if (Math.abs(y) > DEADZONEY) {
                 expY = y;
-                System.out.println(expX);
             } else {
                 expY = 0;
             }
@@ -113,20 +116,30 @@ public class Zeke extends SimpleRobot {
             {
                 if (drivestick.getRawButton(5) && fireTO.get()) {
                     solenoidA.set(true);
-                    fireTO.set();
-                    solenoidTO.set();
+                    fireTO.set(); //begin fire cooldown
+                    solenoidTO.set(); //begin solenoid cooldown
                     System.out.println("Firing A");                    
                 } else if (drivestick.getRawButton(3) && fireTO.get()) {
                     solenoidB.set(true);
                     fireTO.set();
                     solenoidTO.set();
                     System.out.println("Firing B");                    
-                }
-                if (solenoidTO.get()) {
-                    solenoidA.set(false);
-                    solenoidB.set(false);
-                }
-
+                }              
+            }
+            
+            if (solenoidTO.get()) {
+                solenoidA.set(false); //after solenoid cooldown, set to false
+                solenoidB.set(false);
+            }
+            
+            angY = anglerstick.getY();
+            if (Math.abs(angY) > DEADZONEX)
+            {             
+                angler.set(-1*angY*.4);
+            }
+            else
+            {
+                angler.set(0);
             }
             Timer.delay(0.005); //5ms
         }
