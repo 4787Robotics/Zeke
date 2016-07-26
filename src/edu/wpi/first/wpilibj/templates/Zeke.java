@@ -112,14 +112,14 @@ public class Zeke extends SimpleRobot {
             frontRight.set(expX + expY);
             rearRight.set(expX + expY);    
 
-            if (drivestick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
+            if (anglerstick.getRawButton(1)) //ZEKE's nuclear arming system; both drivers must pull the trigger to fire
             {
-                if (drivestick.getRawButton(5) && fireTO.get()) {
+                if (anglerstick.getRawButton(2) && fireTO.get()) {
                     solenoidA.set(true);
                     fireTO.set(); //begin fire cooldown
                     solenoidTO.set(); //begin solenoid cooldown
                     System.out.println("Firing A");                    
-                } else if (drivestick.getRawButton(3) && fireTO.get()) {
+                } else if (anglerstick.getRawButton(3) && fireTO.get()) {
                     solenoidB.set(true);
                     fireTO.set();
                     solenoidTO.set();
@@ -169,6 +169,7 @@ public class Zeke extends SimpleRobot {
     public void disabled() {
         solenoidA.set(false);
         solenoidB.set(false);
+        frontLeft.set(0); frontRight.set(0); rearLeft.set(0); rearRight.set(0);
     }
 
 }
